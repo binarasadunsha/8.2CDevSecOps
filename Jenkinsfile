@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Security Scan') {
             steps {
-                echo 'Running security scan'
+                echo 'Running security scan...'
             }
         }
 
@@ -29,19 +29,14 @@ pipeline {
 
     post {
         success {
-            emailext (
-                to: 'binarasadunsha22774@gmail.com',
-                subject: "SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-                body: "The build was successful!\nCheck the details here: ${env.BUILD_URL}"
-            )
+            emailext subject: 'Jenkins Build SUCCESS: ${JOB_NAME} #${BUILD_NUMBER}',
+                     body: "Good news!\n\nJob '${JOB_NAME} [${BUILD_NUMBER}]' was successful.\n\nCheck it here: ${BUILD_URL}",
+                     to: 'binarasadunsha22774@gmail.com'
         }
-
         failure {
-            emailext (
-                to: 'binarasadunsha22774@gmail.com',
-                subject: "FAILURE: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-                body: "The build has failed.\nCheck the details here: ${env.BUILD_URL}"
-            )
+            emailext subject: 'Jenkins Build FAILURE: ${JOB_NAME} #${BUILD_NUMBER}',
+                     body: "Oops!\n\nJob '${JOB_NAME} [${BUILD_NUMBER}]' failed.\n\nCheck it here: ${BUILD_URL}",
+                     to: 'binarasadunsha22774@gmail.com'
         }
     }
 }
