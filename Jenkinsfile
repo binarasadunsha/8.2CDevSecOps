@@ -27,16 +27,34 @@ pipeline {
         }
     }
 
-    post {
-        success {
-            emailext subject: 'Jenkins Build SUCCESS: ${JOB_NAME} #${BUILD_NUMBER}',
-                     body: "Good news!\n\nJob '${JOB_NAME} [${BUILD_NUMBER}]' was successful.\n\nCheck it here: ${BUILD_URL}",
-                     to: 'binarasadunsha22774@gmail.com'
-        }
-        failure {
-            emailext subject: 'Jenkins Build FAILURE: ${JOB_NAME} #${BUILD_NUMBER}',
-                     body: "Oops!\n\nJob '${JOB_NAME} [${BUILD_NUMBER}]' failed.\n\nCheck it here: ${BUILD_URL}",
-                     to: 'binarasadunsha22774@gmail.com'
-        }
+   post {
+    success {
+        emailext(
+            subject: "Jenkins Build SUCCESS: ${JOB_NAME} #${BUILD_NUMBER}",
+            body: """Good news!
+
+Job '${JOB_NAME}' [#${BUILD_NUMBER}] was successful.
+
+🔗 Check it here: ${BUILD_URL}
+""",
+            to: 'binarasadunsha22774@gmail.com',
+            attachLog: true
+        )
     }
+
+    failure {
+        emailext(
+            subject: "Jenkins Build FAILURE: ${JOB_NAME} #${BUILD_NUMBER}",
+            body: """Oops! Build failed.
+
+Job '${JOB_NAME}' [#${BUILD_NUMBER}]
+
+🔗 View the details: ${BUILD_URL}
+""",
+            to: 'binarasadunsha22774@gmail.com',
+            attachLog: true
+        )
+    }
+}
+
 }
